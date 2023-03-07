@@ -3,13 +3,25 @@ import "../styles/App.scss";
 
 function App() {
   const [numberOfErrors, setNumberOfErrors] = useState(0);
+  const [lastLetter, setLastLetter] = useState("");
+  const [error, setError] = useState("");
 
   const handleIncrement = (ev) => {
     ev.preventDefault();
     setNumberOfErrors(numberOfErrors + 1);
-    // console.log(numberOfErrors);
     console.log("click");
   };
+
+  const handleInput = (ev) => {
+    const esValido = /^[a-zA-Z]+$/.test(ev.target.value);
+    if (esValido) {
+      setLastLetter(ev.target.value);
+      setError("");
+    } else {
+      setError("El valor ingresado no es válido");
+    }
+  };
+
   return (
     <div className='page'>
       <header>
@@ -53,8 +65,11 @@ function App() {
               type='text'
               name='last-letter'
               id='last-letter'
+              value={lastLetter}
+              onChange={handleInput}
             />
           </form>
+          <p>{error}</p>
         </section>
         <section className={`dummy error-${numberOfErrors}`}>
           <span className='error-13 eye'></span>
