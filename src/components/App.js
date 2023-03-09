@@ -5,6 +5,8 @@ function App() {
   const [numberOfErrors, setNumberOfErrors] = useState(0);
   const [lastLetter, setLastLetter] = useState("");
   const [error, setError] = useState("");
+  const [word, setWord] = useState("katakroker");
+  const [userLetters, setUserLetters] = useState([]);
 
   const handleIncrement = (ev) => {
     ev.preventDefault();
@@ -13,15 +15,30 @@ function App() {
   };
 
   const handleInput = (ev) => {
-    const esValido = /^[a-zA-Z]+$/.test(ev.target.value);
+    const esValido = /^[a-zA-Z\s]*$/.test(ev.target.value);
     if (esValido) {
       setLastLetter(ev.target.value);
-      setError("");
+      if (ev.target.value !== "") {
+        userLetters.push(ev.target.value);
+        setUserLetters([...userLetters]);
+        setError("");
+      }
     } else {
+      setLastLetter("");
       setError("El valor ingresado no es válido");
     }
   };
 
+  console.log(userLetters);
+
+  const renderSolutionLetters = () => {
+    const wordLetters = word.split("");
+    return wordLetters.map((letter, index) => (
+      <li key={index} className='letter'>
+        {userLetters.includes(letter) ? letter : ""}
+      </li>
+    ));
+  };
   return (
     <div className='page'>
       <header>
@@ -31,8 +48,9 @@ function App() {
         <section>
           <div className='solution'>
             <h2 className='title'>Solución:</h2>
-            <ul className='letters'>
-              <li className='letter'>k</li>
+
+            <ul className='letters'> {renderSolutionLetters()} </ul>
+            {/* <li className='letter'>k</li>
               <li className='letter'>a</li>
               <li className='letter'></li>
               <li className='letter'>a</li>
@@ -41,8 +59,7 @@ function App() {
               <li className='letter'></li>
               <li className='letter'>k</li>
               <li className='letter'>e</li>
-              <li className='letter'>r</li>
-            </ul>
+              <li className='letter'>r</li> */}
           </div>
           <div className='error'>
             <h2 className='title'>Letras falladas:</h2>
